@@ -136,6 +136,7 @@ MESSAGE(STATUS "----------------------------------------------------------------
 #SET(ICMAKER_CUDA_COMPUTE_VERSION 20)
 SET(ICMAKER_CUDA_COMPUTE_VERSION 35)
 
+SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-Xcompiler=-Wall -std=c++11")
 SET(ICMAKER_CUDA_PTXAS_VERBOSE "") # "--resource-usage") #nvcc outputs register and memory usage data for each kernel
 SET(ICMAKER_CUDA_WALL "-Xcompiler=-Wall")
 SET(ICMAKER_CUDA_MAXREGS "--maxrregcount=63") # set to 31 to compile for JetsonTX1; N*blocksize must be smaller than max registers per block
