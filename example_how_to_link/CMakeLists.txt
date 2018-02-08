@@ -4,10 +4,18 @@
 # CMakeLists file to demonstrate how to use GPU Voxels in your own project:
 # ======================================
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.1)
 project (gvl_linkage_test)
 
 # First we have to find our dependencies:
+FIND_PACKAGE(CUDA)
+IF(CUDA_FOUND)
+  MESSAGE(STATUS "[OK]      Building GPU-Voxels. Found CUDA.")
+ELSE(CUDA_FOUND)
+  MESSAGE(STATUS "[ERROR]   Could not find CUDA. GPU-Voxels can not be built!")
+ENDIF(CUDA_FOUND)
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11 -w -O3 -lineinfo")
+
 FIND_PACKAGE(icl_core REQUIRED )
 FIND_PACKAGE(gpu_voxels REQUIRED)
 FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
@@ -27,7 +35,7 @@ add_definitions(
 
 
 # Create a library that uses GPU Voxels:
-add_library (gvl_linkage_test_lib gvl_linkage_test_lib.cpp)
+cuda_add_library (gvl_linkage_test_lib gvl_linkage_test_lib.cpp)
 
 target_include_directories (gvl_linkage_test_lib
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
@@ -45,5 +53,5 @@ target_link_libraries (gvl_linkage_test
     LINK_PUBLIC ${Boost_SYSTEM_LIBRARY}
     LINK_PUBLIC ${icl_core_LIBRARIES}
     LINK_PUBLIC ${gpu_voxels_LIBRARIES}
-
+    ${CUDA_LIBRARIES}
 )
